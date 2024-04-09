@@ -1,0 +1,19 @@
+{
+  "name": "airbean_api",
+  "version": "1.0.0",
+  "description": "airbean api group assignment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spicy-criminals/FU-JS23_grupp_AirBean_API.git"
+  },
+  "author": "anna thunberg marcus widen rolf sparv daniel budai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spicy-criminals/FU-JS23_grupp_AirBean_API/issues"
+  },
+  "homepage": "https://github.com/spicy-criminals/FU-JS23_grupp_AirBean_API#readme"
+}
