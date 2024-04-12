@@ -11,36 +11,36 @@ const db = new Datastore({ filename: 'database.db', autoload: true });
 
 const PORT = 8000;
 
-// Middleware for validating user input
+// Middleware för validering av användarinput
 const validateOrder = [
-    body('userId').isUUID().withMessage('Invalid user ID format'),
-    body('productId').isInt().withMessage('Product ID must be an integer').custom(value => {
-        const product = menuData.menu.find(item => item.id === value);
-        if (!product) {
-            throw new Error('Invalid product ID');
+    body('userId').isUUID().withMessage('Ogiltigt användar-ID-format'),
+    body('productId').isInt().withMessage('Produkt-ID måste vara ett heltal').custom(value => {
+        const produkt = menyData.meny.find(item => item.id === value);
+        if (!produkt) {
+            throw new Error('Ogiltigt produkt-ID');
         }
         return true;
     }),
-    body('price').isNumeric().withMessage('Price must be a number'),
+    body('price').isNumeric().withMessage('Priset måste vara ett nummer'),
 ];
 
-// Middleware for error handling
+// Middleware för hantering av fel
 const errorHandler = (err, req, res, next) => {
     console.error(err.stack);
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-        return res.status(400).json({ error: 'Invalid JSON payload' });
+        return res.status(400).json({ error: 'Ogiltigt JSON-innehåll' });
     }
-    res.status(500).json({ error: err.message || 'Internal Server Error' });
+    res.status(500).json({ error: err.message || 'Internt serverfel' });
 };
 
-// Error handling middleware
+// Middleware för felhantering
 app.use(errorHandler);
 
-// Create Account Endpoint
+// Slutpunkt för att skapa konto
 app.post('/signup', [
-    body('username').isString().withMessage('Username must be a string'),
-    body('email').isEmail().withMessage('Invalid email address'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('username').isString().withMessage('Användarnamn måste vara en sträng'),
+    body('email').isEmail().withMessage('Ogiltig e-postadress'),
+    body('password').isLength({ min: 6 }).withMessage('Lösenordet måste vara minst 6 tecken långt'),
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -49,20 +49,20 @@ app.post('/signup', [
         }
         const { username, email, password } = req.body;
         const userId = uuidv4();
-        // Check if the user already exists
+        // Kontrollera om användaren redan finns
         const existingUser = await db.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ error: 'User already exists' });
+            return res.status(400).json({ error: 'Användaren finns redan' });
         }
-        // Store user data in the database
+        // Lagra användardata i databasen
         await db.insert({ userId, username, email, password });
         res.status(201).json({ userId });
     } catch (error) {
-        res.status(500).json({ error: error.message || 'Internal Server Error' });
+        res.status(500).json({ error: error.message || 'Internt serverfel' });
     }
 });
 
-// Place Order Endpoint
+// Slutpunkt för att placera en order
 app.post('/order', validateOrder, async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -72,51 +72,81 @@ app.post('/order', validateOrder, async (req, res) => {
         const { userId, productId, price } = req.body;
         const product = menuData.menu.find(item => item.id === parseInt(productId));
         if (product.price !== parseFloat(price)) {
-            return res.status(400).json({ error: 'Invalid price for the product' });
+            return res.status(400).json({ error: 'Ogiltigt pris för produkten' });
         }
-        // Store order data in the database
+        // Lagra orderdata i databasen
         await db.insert({ userId, productId, price, timestamp: new Date() });
-        res.status(201).json({ message: 'Order placed successfully' });
+        res.status(201).json({ message: 'Order placerad framgångsrikt' });
     } catch (error) {
-        res.status(500).json({ error: error.message || 'Internal Server Error' });
+        res.status(500).json({ error: error.message || 'Internt serverfel' });
     }
 });
 
-// Define a route handler for the root URL
+// Ange en rutt-hanterare för rot-URL:en
 app.get('/', (req, res) => {
-    res.send('Welcome to the API');
+    res.send('Välkommen till AirBean-API:et');
 });
 
-// Define a route handler to get the menu
+// Ange en rutt-hanterare för att hämta menyn
 app.get('/menu', (req, res) => {
     res.json(menuData.menu);
+});
+
+// Ange en rutt-hanterare för att hämta en specifik menyartikel med dess ID
+app.get('/menu/:itemId', (req, res) => {
+    const itemId = parseInt(req.params.itemId);  // Se till att parametern behandlas som ett heltal
+    const item = menuData.menu.find(item => item.id === itemId);  // Sök efter artikeln med ID
+
+    if (!item) {
+        return res.status(404).json({ error: 'Artikeln hittades inte' });  // Returnera ett fel om artikeln inte finns
+    }
+
+    res.json(item);  // Returnera den funna artikeln
 });
 
 // Get Ongoing Orders Endpoint
 app.get('/ongoing-orders', async (req, res) => {
     try {
         const currentTime = new Date();
-        // Retrieve ongoing orders based on the current time from the database
-        const ongoingOrders = await db.find({ timestamp: { $lte: currentTime } });
-        res.json(ongoingOrders);
+        const ongoingOrders = await db.find({});
+        const filteredOngoingOrders = ongoingOrders.filter(order => {
+            const orderTime = new Date(order.timestamp);
+            return isBefore(orderTime, currentTime);
+        });
+        res.json(filteredOngoingOrders);
     } catch (error) {
         res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
 });
 
-// Get Order History Endpoint
+// Slutpunkt för att hämta pågående beställningar
+app.get('/ongoing-orders', async (req, res) => {
+    try {
+        const currentTime = new Date();
+        const ongoingOrders = await db.find({});
+        const filteredOngoingOrders = ongoingOrders.filter(order => {
+            const orderTime = new Date(order.timestamp);
+            return isBefore(orderTime, currentTime);
+        });
+        res.json(filteredOngoingOrders);
+    } catch (error) {
+        res.status(500).json({ error: error.message || 'Internt serverfel' });
+    }
+});
+
+// Slutpunkt för att hämta beställningshistorik
 app.get('/order-history/:userId', async (req, res) => {
     try {
         const userId = req.params.userId;
-        // Retrieve order history based on the user ID from the database
+        // Hämta beställningshistorik baserat på användar-ID från databasen
         const orderHistory = await db.find({ userId });
         res.json(orderHistory);
     } catch (error) {
-        res.status(500).json({ error: error.message || 'Internal Server Error' });
+        res.status(500).json({ error: error.message || 'Internt serverfel' });
     }
 });
 
-// Start the server
+// Starta servern
 const server = app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Servern körs på port ${PORT}`);
 });
