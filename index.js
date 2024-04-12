@@ -186,14 +186,22 @@ app.get('/ongoing-orders', async (req, res) => {
 // Slutpunkt för att hämta pågående beställningar
 app.get('/ongoing-orders', async (req, res) => {
     try {
+        // Skapar en tidsstämpel för aktuell tid
         const currentTime = new Date();
+
+        // Hämtar alla beställningar från databasen
         const ongoingOrders = await db.find({});
+
+        // Filtrerar ut de beställningar vars tid är före nuvarande tid
         const filteredOngoingOrders = ongoingOrders.filter(order => {
-            const orderTime = new Date(order.timestamp);
-            return isBefore(orderTime, currentTime);
+            const orderTime = new Date(order.timestamp);  // Konverterar beställningens tidstämpel till Date-objekt
+            return isBefore(orderTime, currentTime);  // Kontrollerar om beställningens tid är före nuvarande tid
         });
+
+        // Returnerar de filtrerade pågående beställningarna som ett JSON-objekt
         res.json(filteredOngoingOrders);
     } catch (error) {
+        // Hanterar eventuella fel och returnerar status 500 med felmeddelande
         res.status(500).json({ error: error.message || 'Internt serverfel' });
     }
 });
@@ -201,16 +209,22 @@ app.get('/ongoing-orders', async (req, res) => {
 // Slutpunkt för att hämta beställningshistorik
 app.get('/order-history/:userId', async (req, res) => {
     try {
+        // Extraherar användar-ID från URL-parametrarna
         const userId = req.params.userId;
+
         // Hämta beställningshistorik baserat på användar-ID från databasen
         const orderHistory = await db.find({ userId });
+
+        // Returnerar beställningshistoriken som ett JSON-objekt
         res.json(orderHistory);
     } catch (error) {
+        // Hanterar eventuella fel och returnerar status 500 med felmeddelande
         res.status(500).json({ error: error.message || 'Internt serverfel' });
     }
 });
 
 // Starta servern
 const server = app.listen(PORT, () => {
+    // Skriver ut till konsolen att servern är igång och på vilken port
     console.log(`Servern körs på port ${PORT}`);
 });
