@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/spicy-criminals/FU-JS23_grupp_AirBean_API#readme",
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
     "nedb": "^1.8.0",
     "uuid": "^9.0.1"
   }
