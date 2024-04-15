@@ -4,8 +4,6 @@ const { body, validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid"); // Import UUID to generate unique IDs
 const Datastore = require("nedb-promise");
 
-
-
 // Initialize your NeDB database
 const db = new Datastore({
   filename: "path/to/your/database.db",
@@ -49,5 +47,3 @@ router.post(
 );
 
 module.exports = router;
-
-
