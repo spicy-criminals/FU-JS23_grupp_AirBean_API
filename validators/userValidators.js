@@ -4,6 +4,8 @@ const { body, validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid"); // Import UUID to generate unique IDs
 const Datastore = require("nedb-promise");
 
+
+
 // Initialize your NeDB database
 const db = new Datastore({
   filename: "path/to/your/database.db",
@@ -22,6 +24,7 @@ router.post(
       .isLength({ min: 6 })
       .withMessage("Lösenordet måste vara minst 6 tecken långt"),
   ],
+
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -42,7 +45,9 @@ router.post(
     } catch (error) {
       res.status(500).json({ error: error.message || "Internt serverfel" });
     }
-  }
+    }
 );
 
 module.exports = router;
+
+
