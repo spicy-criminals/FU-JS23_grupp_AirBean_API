@@ -28,7 +28,7 @@ router.post("/", validateNewUser(), validate, createUser);
 
 // put
 router.put("/", (req, res) => {
-  res.send({ data: "updated" });
+  res.send({ message: "User information updated" });
 });
 
 //delete
