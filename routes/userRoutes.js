@@ -10,7 +10,7 @@ router.get("/", (req, res) => {
 
 //post-request föratt skapa användare
 router.post("/", (req, res) => {
-  res.send({ data: "please sign up" });
+  res.send({ data: "created" });
 });
 
 router.put("/", (req, res) => {

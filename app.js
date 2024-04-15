@@ -1,35 +1,44 @@
 const express = require("express");
-const app = express();
 const path = require("path");
-const PORT = 8000;
+const Datastore = require("nedb-promise");
+const { format, isBefore } = require("date-fns");
 
-const Datastore = require("nedb-promise"); // Importerar NeDB-promise, en inbäddad databas för Node.js som använder promises.
+const app = express();
+const PORT = process.env.PORT || 8000;
 
+// Initialize database
 const db = new Datastore({ filename: "database.db", autoload: true });
 
-const { parseISO } = require("date-fns/fp"); // Importerar en funktion för att tolka ISO-strängar från date-fns/fp.
-
+// Import controllers and routes
 const OrderController = require("./controllers/OrderController");
 const MenuController = require("./controllers/MenuController");
-
-const { format, isBefore } = require("date-fns"); // Importerar datumfunktioner från date-fns.
-
-// route variables
 const menuRoutes = require("./routes/menuRoutes");
 const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+
+// Middleware to serve static files
+app.use(express.static(path.join(__dirname, "public")));
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Route handling
 app.use("/user", userRoutes);
 app.use("/menu", menuRoutes);
 app.use("/order", orderRoutes);
 
-// sending html file with linked stylesheet
-app.use(express.static(path.join(__dirname, "public")));
-
+// Root route
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// server listening to port
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something went wrong!");
+});
+
+// Start server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
