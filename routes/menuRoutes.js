@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const menuData = require("../menu.json");
-const { validateProductId } = require("../validateMenu");
+const { validateProductId } = require("../validators/menuValidators");
 // const { validateProductId } = require("./menuRoutes");
 
 router.get("/", (req, res) => {
