@@ -1,29 +1,34 @@
+// Dependencies
 const express = require("express");
 const path = require("path");
 const Datastore = require("nedb-promise");
 const { format, isBefore } = require("date-fns");
 const dotenv = require('dotenv');
 
-const app = express();
-const PORT = process.env.PORT || 8000;
+// Load environment variables from .env file
+dotenv.config();
 
-// Initialize database
-const db = new Datastore({ filename: "database.db", autoload: true });
-
-// Import controllers and routes
+// Controllers and routes
 const OrderController = require("./controllers/OrderController");
 const MenuController = require("./controllers/MenuController");
 const menuRoutes = require("./routes/menuRoutes");
 const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 
-// Middleware to serve static files
+// Constants
+const PORT = process.env.PORT || 8000;
+const DATABASE_FILENAME = "database.db";
+
+// Initialize Express app
+const app = express();
+
+// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Middleware to parse JSON bodies
+// Parse JSON bodies
 app.use(express.json());
 
-// Route handling
+// Routes
 app.use("/user", userRoutes);
 app.use("/menu", menuRoutes);
 app.use("/order", orderRoutes);
@@ -38,6 +43,9 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something went wrong!");
 });
+
+// Initialize database
+const db = new Datastore({ filename: DATABASE_FILENAME, autoload: true });
 
 // Start server
 app.listen(PORT, () => {
