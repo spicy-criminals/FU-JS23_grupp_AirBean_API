@@ -27,18 +27,17 @@ app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/menu", menuRoutes);
 app.use("/order", orderRoutes);
-//app.use(errorHandler);
+app.use(errorHandler);
 
 // Root route
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
+/*app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something went wrong!");
-});
+});*/
 
 // Start server
 app.listen(PORT, () => {
