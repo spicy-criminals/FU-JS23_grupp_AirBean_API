@@ -11,7 +11,9 @@ router.get("/", (req, res) => {
 router.get("/:productId", (req, res) => {
   const productId = parseInt(req.params.productId);
 
-  //kontrollerar om produkten finns i menu-json (matchar ett giltigt id)
+  res.json(menuData.menu.productId);
+
+  // kontrollerar om produkten finns i menu-json (matchar ett giltigt id)
   if (!validateProductId(productId.toString())) {
     return res.status(404).send("sorry, this product does not exist");
   }
