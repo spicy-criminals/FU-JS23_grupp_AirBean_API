@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const Datastore = require("nedb-promise");
 const { format, isBefore } = require("date-fns");
+const dotenv = require('dotenv');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
