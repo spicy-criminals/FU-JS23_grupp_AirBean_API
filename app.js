@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const Datastore = require("nedb-promise");
 const { format, isBefore } = require("date-fns");
+const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/menu", menuRoutes);
 app.use("/order", orderRoutes);
+//app.use(errorHandler);
 
 // Root route
 app.get("/", (req, res) => {
