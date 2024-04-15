@@ -2,7 +2,7 @@
   "name": "airbean_api",
   "version": "1.0.0",
   "description": "airbean api group assignment",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,6 +23,7 @@
     "express-validator": "^7.0.1",
     "nedb": "^1.8.0",
     "nedb-promise": "^2.0.1",
+    "nodemon": "^3.1.0",
     "uuid": "^9.0.1"
   }
 }
