@@ -8,8 +8,14 @@
   </head>
   <body>
     <h1>Welcome to the Airbean API</h1>
-    <h2>for users, go to: <a href="/user">/user</a></h2>
-    <h2>for products, go to: <a href="/menu">/menu</a></h2>
+    <h2>for all registered users, go go: <a href="/users">/users</a></h2>
+    <h2>to sign up, go to: <a href="/users/signup">/users/signup</a></h2>
+    <h2>to log in, go to: <a href="/users/login">/users/login</a></h2>
+    <h2>
+      for a specific user, go to:
+      <a href="/users/user/:username">/users/user/:username</a>
+    </h2>
+    <h2>for list of products, go to: <a href="/menu">/menu</a></h2>
     <h2>for order summary, go to: <a href="/order">/order</a></h2>
   </body>
 </html>

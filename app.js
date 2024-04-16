@@ -25,7 +25,7 @@ const authenticate = userRoutesModule.authenticate;
 const errorHandler = require("./middlewares/errorHandler");
 
 // express router routes (variabler?)
-app.use("/user", userRoutes);
+app.use("/users", userRoutes);
 app.use("/menu", menuRoutes);
 app.use("/order", orderRoutes);
 app.use(errorHandler);
