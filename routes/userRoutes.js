@@ -47,14 +47,17 @@ router.delete("/", async (req, res) => {
 
 
 
-//inloggning - verkar (inte) funka
+//inloggning - verkar funka nu
 router.post("/login", async (req, res) => {
-  //try {
+  try {
     const { username, password } = req.body
 
+    //försök 1
     /* const user = await db.find(user => user.username === username); //hämtar alla? med findOne hämtar den alltid den första ist för den som matchar användarnamnet???
     console.log(user, password, user.password) */
-    db.findOne({ "username": username }, (error, user) => { //fastnar på "sending request"
+
+    //försök 2
+    /* db.findOne({ "username": username }, (error, user) => { //fastnar på "sending request"
       if (error) {
         res.status(500).send({ message: "Kunde inte logga in"});
         return
@@ -65,7 +68,17 @@ router.post("/login", async (req, res) => {
       }
       const token = jwt.sign({ "userId":user.userId }, JWT_SECRET, {expiresIn: "30m"}); //eller utan utgång
       res.status(200).json({ token })
-    })
+    }) */
+
+    //försök 3
+    const user = await db.findOne({ "username":username });
+
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      res.status(401).send("Fel användarnamn eller lösenord");
+      return
+    }
+    const token = jwt.sign({ "userID":user.userID }, JWT_SECRET, {expiresIn: "30m"})
+    res.status(200).json({ token })
 
     /* if (!user || !bcrypt.compareSync(password, user.password)) {
       res.status(401).send("Fel användarnamn eller lösenord");
@@ -74,9 +87,9 @@ router.post("/login", async (req, res) => {
 
     
 
-  /* } catch (error) {
+  } catch (error) {
     res.status(500).send({error: "Kunde inte logga in"})
-  } */
+  }
 })
 
 
