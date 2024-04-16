@@ -1,4 +1,5 @@
-const express = require("express");
+const { body } = require("express-validator");
+const menuData = require("../menu.json");
 
 const validateOrder = [
   body("userId").isUUID().withMessage("Ogiltigt användar-ID-format"),
@@ -16,3 +17,5 @@ const validateOrder = [
 
   body("price").isNumeric().withMessage("Priset måste vara ett nummer"),
 ];
+
+module.exports = validateOrder;
