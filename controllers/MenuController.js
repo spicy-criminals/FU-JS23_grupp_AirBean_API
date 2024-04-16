@@ -5,7 +5,7 @@ async function getMenu(req, res) {
     const menu = await menuData.menu;
     res.json(menu);
   } catch (error) {
-    res.status(500).json({ error: error.message || "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 
@@ -15,12 +15,12 @@ async function getMenuItem(req, res) {
     const item = await menuData.menu.find((item) => item.id === itemId);
 
     if (!item) {
-      return res.status(404).json({ error: "Artikeln hittades inte" });
+      return res.status(404).json({ error: "Item not found" });
     }
 
     res.json(item);
   } catch (error) {
-    res.status(500).json({ error: error.message || "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 

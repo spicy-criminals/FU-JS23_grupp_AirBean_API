@@ -1,33 +1,33 @@
+// Dependencies
 const express = require("express");
 const path = require("path");
-const Datastore = require("nedb-promise");
-const { format, isBefore } = require("date-fns");
-const errorHandler = require("./middlewares/errorHandler");
 
+
+// Load environment variables from .env file
+dotenv.config();
+
+// Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 8000;
 
-// Initialize database
-const db = new Datastore({ filename: "database.db", autoload: true });
-
-// Import controllers and routes
-const OrderController = require("./controllers/OrderController");
-const MenuController = require("./controllers/MenuController");
-const menuRoutes = require("./routes/menuRoutes");
-const userRoutes = require("./routes/userRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-
-// Middleware to serve static files
+// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Middleware to parse JSON bodies
-app.use(express.json());
+// Parse JSON bodies
+app.use(express.json()); 
 
-// Route handling
+// Controllers and routes
+const userRoutes = require("./routes/userRoutes");
+const menuRoutes = require("./routes/menuRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+
+// express router routes
 app.use("/user", userRoutes);
 app.use("/menu", menuRoutes);
 app.use("/order", orderRoutes);
 app.use(errorHandler);
+
+// Constants
+const PORT = process.env.PORT || 8000;
 
 // Root route
 app.get("/", (req, res) => {
