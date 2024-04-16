@@ -4,16 +4,9 @@ const db = require("../database");
 const { createUser } = require("../controllers/UserController");
 const { validateNewUser, validate } = require("../validators/userValidators");
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = "1234"; //eller något starkare
 const bcrypt = require("bcrypt");
 
-/*
-GET /users to retrieve all users.
-POST /users to create a new user.
-GET /users/:id to retrieve a specific user.
-PUT /users/:id to update a specific user.
-DELETE /users/:id to delete a specific user.
-*/
+const JWT_SECRET = "your_secret_key_here"; // Use a stronger secret key
 
 ///////// REQUESTS //////////
 
@@ -77,7 +70,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-//inloggning - verkar funka nu
+// User login
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -85,38 +78,38 @@ router.post("/login", async (req, res) => {
     const user = await db.findOne({ username: username });
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
-      res.status(401).send("Fel användarnamn eller lösenord");
+      res.status(401).send("Incorrect username or password");
       return;
     }
+
     const token = jwt.sign({ userID: user.userID }, JWT_SECRET, {
       expiresIn: "30m",
     });
-    res
-      .status(200)
-      .json({ user: username, message: "you are logged in", token });
+
+    res.status(200).json({ user: username, message: "You are logged in", token });
   } catch (error) {
-    res.status(500).send({ error: "Kunde inte logga in" });
+    res.status(500).send({ error: "Could not log in" });
   }
 });
 
-//tokenautentisering
-authenticate = (req, res, next) => {
-  const authorisation = req.headers["authorization"]; //bör skickas med som "Authorization: Bearer {token}" - kan alternativt skickas i body
-  const token = authorisation && authorisation.split(" ")[1]; //plockar ut tokenet ur ovan beskrivna formatet
+// Token authentication middleware
+const authenticate = (req, res, next) => {
+  const authorization = req.headers["authorization"];
+  const token = authorization && authorization.split(" ")[1];
 
   if (!token) {
-    res.status(401).send("Inget giltigt token skickades med");
+    res.status(401).send("No valid token provided");
     return;
   }
 
   jwt.verify(token, JWT_SECRET, (error, user) => {
     if (error) {
-      res.status(403).send({ error: "Ogiltigt token" });
+      res.status(403).send({ error: "Invalid token" });
       return;
     }
-    req.user = user; //userID läggs till i bodyn om tokenet stämmer
+    req.user = user;
     next();
   });
 };
 
-module.exports = router;
+module.exports = { router, authenticate };
