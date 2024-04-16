@@ -1,5 +1,10 @@
 const { validationResult } = require("express-validator");
-const { getMenuItem } = require("./path/to/menuRepository");
+const { getMenuItem } = require("../repositories/menuRepository");
+const {
+  createOrder: createOrderInRepo,
+  getOngoingOrders: getOngoingOrdersInRepo,
+  getOrderHistory: getOrderHistoryInRepo,
+} = require("../repositories/orderRepository");
 
 // Function to create a new order
 async function createOrder(req, res) {
@@ -13,15 +18,12 @@ async function createOrder(req, res) {
     const { userId, productId, price } = req.body;
 
     const product = getMenuItem(productId);
-    /*const product = menuData.menu.find(
-      (item) => item.id === parseInt(productId)
-    ); */
 
     if (!product || product.price !== parseFloat(price)) {
       return res.status(400).json({ error: "Invalid product or price" });
     }
 
-    await db.insert({ userId, productId, price, timestamp: new Date() });
+    await createOrderInRepo(userId, productId, price);
 
     res.status(201).json({ message: "Order placed successfully" });
   } catch (error) {
@@ -37,7 +39,7 @@ async function getOngoingOrders(req, res) {
     const currentTime = new Date();
 
     // Find ongoing orders from the database
-    const ongoingOrders = await db.find({ timestamp: { $lt: currentTime } });
+    const ongoingOrders = await getOngoingOrdersInRepo(currentTime);
 
     // Respond with ongoing orders
     res.json(ongoingOrders);
@@ -55,7 +57,7 @@ async function getOrderHistory(req, res) {
     const userId = req.params.userId;
 
     // Find order history for the specified user
-    const orderHistory = await db.find({ userId });
+    const orderHistory = await getOrderHistoryInRepo(userId);
 
     // Respond with order history
     res.json(orderHistory);
