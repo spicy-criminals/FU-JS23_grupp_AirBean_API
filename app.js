@@ -1,7 +1,7 @@
 // Dependencies
 const express = require("express");
 const path = require("path");
-const dotenv = require("dotenv");
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -24,6 +24,7 @@ const orderRoutes = require("./routes/orderRoutes");
 app.use("/user", userRoutes);
 app.use("/menu", menuRoutes);
 app.use("/order", orderRoutes);
+app.use(errorHandler);
 
 // Constants
 const PORT = process.env.PORT || 8000;
@@ -33,11 +34,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
+/*app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something went wrong!");
-});
+});*/
 
 // Start server
 app.listen(PORT, () => {
