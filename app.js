@@ -1,7 +1,8 @@
 // Dependencies
 const express = require("express");
 const path = require("path");
-
+const dotenv = require("dotenv");
+// const { ErrorHandler } = require("./middlewares/errorHandler");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -13,12 +14,13 @@ const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 
 // Parse JSON bodies
-app.use(express.json()); 
+app.use(express.json());
 
 // Controllers and routes
 const userRoutes = require("./routes/userRoutes");
 const menuRoutes = require("./routes/menuRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const errorHandler = require("./middlewares/errorHandler");
 
 // express router routes
 app.use("/user", userRoutes);
