@@ -15,6 +15,12 @@ const menuRoutes = require("./routes/menuRoutes");
 const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 
+// Initialize Express app
+const app = express();
+
+// Parse JSON bodies
+app.use(express.json()); // vad har den här för funktion i app-filen? används den här?
+
 // express router routes (variabler?)
 app.use("/user", userRoutes);
 app.use("/menu", menuRoutes);
@@ -24,14 +30,8 @@ app.use("/order", orderRoutes);
 const PORT = process.env.PORT || 8000;
 // const DATABASE_FILENAME = "database.db"; ----- behöver vi denna här? används inte?
 
-// Initialize Express app
-const app = express();
-
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
-
-// Parse JSON bodies
-app.use(express.json()); // vad har den här för funktion i app-filen? används den här?
 
 // Root route
 app.get("/", (req, res) => {
