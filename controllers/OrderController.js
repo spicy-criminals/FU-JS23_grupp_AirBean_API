@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 
 // Function to create a new order
 async function createOrder(req, res) {
@@ -9,24 +9,20 @@ async function createOrder(req, res) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Extract data from request body
-    const { userId, productId, price } = req.body; 
+    const { userId, productId, price } = req.body;
 
-    // Find the product in the menu
-    const product = menuData.menu.find(item => item.id === parseInt(productId));
+    const product = menuData.menu.find(
+      (item) => item.id === parseInt(productId)
+    );
 
-    // Check if product exists and if price matches
     if (!product || product.price !== parseFloat(price)) {
       return res.status(400).json({ error: "Invalid product or price" });
     }
 
-    // Insert order into the database
     await db.insert({ userId, productId, price, timestamp: new Date() });
 
-    // Respond with success message
     res.status(201).json({ message: "Order placed successfully" });
   } catch (error) {
-    // Handle errors
     console.error("Error creating order:", error);
     res.status(500).json({ error: "Internal server error" });
   }

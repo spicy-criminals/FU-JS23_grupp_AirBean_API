@@ -17,13 +17,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 // Controllers and routes
-const userRoutes = require("./routes/userRoutes");
+const userRoutesModule = require("./routes/userRoutes");
+const userRoutes = userRoutesModule.router;
 const menuRoutes = require("./routes/menuRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const authenticate = userRoutesModule.authenticate;
 const errorHandler = require("./middlewares/errorHandler");
 
 // express router routes (variabler?)
-app.use("/user", userRoutes);
+app.use("/user", authenticate, userRoutes);
 app.use("/menu", menuRoutes);
 app.use("/order", orderRoutes);
 app.use(errorHandler);
