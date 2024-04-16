@@ -3,7 +3,7 @@ const { body, validationResult } = require("express-validator");
 // validering användaruppgifter
 const validateNewUser = () => [
   body("username").isString().withMessage("Användarnamn måste vara en sträng"),
-  body("email").isEmail().withMessage("Ogiltig e-postadress"),
+
   body("password")
     .isLength({ min: 6 })
     .withMessage("Lösenordet måste vara minst 6 tecken långt"),
