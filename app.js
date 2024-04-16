@@ -22,7 +22,7 @@ const menuRoutes = require("./routes/menuRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 
-// express router routes
+// express router routes (variabler?)
 app.use("/user", userRoutes);
 app.use("/menu", menuRoutes);
 app.use("/order", orderRoutes);

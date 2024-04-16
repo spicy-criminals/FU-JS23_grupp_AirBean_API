@@ -3,6 +3,9 @@ const router = express.Router();
 const db = require("../database");
 const { createUser } = require("../controllers/UserController");
 const { validateNewUser, validate } = require("../validators/userValidators");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = "1234"; //eller något starkare
+const bcrypt = require("bcrypt")
 
 /*
 GET /users to retrieve all users.
@@ -69,5 +72,75 @@ router.delete("/:id", async (req, res) => {
     res.status(500).send({ error: "Could not delete user" });
   }
 });
+
+
+
+//inloggning - verkar funka nu
+router.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body
+
+    //försök 1
+    /* const user = await db.find(user => user.username === username); //hämtar alla? med findOne hämtar den alltid den första ist för den som matchar användarnamnet???
+    console.log(user, password, user.password) */
+
+    //försök 2
+    /* db.findOne({ "username": username }, (error, user) => { //fastnar på "sending request"
+      if (error) {
+        res.status(500).send({ message: "Kunde inte logga in"});
+        return
+      }
+      if (!user || !bcrypt.compareSync(password, user.password)) {
+        res.status(401).send("Fel användarnamn eller lösenord")
+        return
+      }
+      const token = jwt.sign({ "userId":user.userId }, JWT_SECRET, {expiresIn: "30m"}); //eller utan utgång
+      res.status(200).json({ token })
+    }) */
+
+    //försök 3
+    const user = await db.findOne({ "username":username });
+
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      res.status(401).send("Fel användarnamn eller lösenord");
+      return
+    }
+    const token = jwt.sign({ "userID":user.userID }, JWT_SECRET, {expiresIn: "30m"})
+    res.status(200).json({ token })
+
+    /* if (!user || !bcrypt.compareSync(password, user.password)) {
+      res.status(401).send("Fel användarnamn eller lösenord");
+      return
+    } */
+
+    
+
+  } catch (error) {
+    res.status(500).send({error: "Kunde inte logga in"})
+  }
+})
+
+
+//tokenautentisering - ej testat, bör förmodligen ligga annanstans
+authenticate = (req, res, next) => {
+  const authorisation = req.headers["authorization"]; //bör skickas med som "Authorization: Bearer {token}" - kan alternativt skickas i body
+  const token = authorisation && authorisation.split(' ')[1]; //plockar ut tokenet ur ovan beskrivna formatet
+
+  if (!token) {
+    res.status(401).send("Inget giltigt token skickades med");
+    return
+  }
+
+  jwt.verify(token, JWT_SECRET, (error, user) => {
+    if (error) {
+      res.status(403).send({ error:"Ogiltigt token" });
+      return
+    }
+    req.user = user; //userID läggs till i bodyn om tokenet stämmer
+    next()
+  })
+}
+
+
 
 module.exports = router;
