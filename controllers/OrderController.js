@@ -10,7 +10,7 @@ async function createOrder(req, res) {
     }
 
     // Extract data from request body
-    const { userId, productId, price } = req.body;
+    const { userId, productId, price } = req.body; 
 
     // Find the product in the menu
     const product = menuData.menu.find(item => item.id === parseInt(productId));
