@@ -1,4 +1,10 @@
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
+const { getMenuItem } = require("../repositories/menuRepository");
+const {
+  createOrder: createOrderInRepo,
+  getOngoingOrders: getOngoingOrdersInRepo,
+  getOrderHistory: getOrderHistoryInRepo,
+} = require("../repositories/orderRepository");
 
 // Function to create a new order
 async function createOrder(req, res) {
@@ -9,24 +15,18 @@ async function createOrder(req, res) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Extract data from request body
-    const { userId, productId, price } = req.body; 
+    const { userId, productId, price } = req.body;
 
-    // Find the product in the menu
-    const product = menuData.menu.find(item => item.id === parseInt(productId));
+    const product = getMenuItem(productId);
 
-    // Check if product exists and if price matches
     if (!product || product.price !== parseFloat(price)) {
       return res.status(400).json({ error: "Invalid product or price" });
     }
 
-    // Insert order into the database
-    await db.insert({ userId, productId, price, timestamp: new Date() });
+    await createOrderInRepo(userId, productId, price);
 
-    // Respond with success message
     res.status(201).json({ message: "Order placed successfully" });
   } catch (error) {
-    // Handle errors
     console.error("Error creating order:", error);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -39,7 +39,7 @@ async function getOngoingOrders(req, res) {
     const currentTime = new Date();
 
     // Find ongoing orders from the database
-    const ongoingOrders = await db.find({ timestamp: { $lt: currentTime } });
+    const ongoingOrders = await getOngoingOrdersInRepo(currentTime);
 
     // Respond with ongoing orders
     res.json(ongoingOrders);
@@ -57,7 +57,7 @@ async function getOrderHistory(req, res) {
     const userId = req.params.userId;
 
     // Find order history for the specified user
-    const orderHistory = await db.find({ userId });
+    const orderHistory = await getOrderHistoryInRepo(userId);
 
     // Respond with order history
     res.json(orderHistory);
