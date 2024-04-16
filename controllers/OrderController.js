@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const { getMenuItem } = require("./path/to/menuRepository");
 
 // Function to create a new order
 async function createOrder(req, res) {
@@ -11,9 +12,10 @@ async function createOrder(req, res) {
 
     const { userId, productId, price } = req.body;
 
-    const product = menuData.menu.find(
+    const product = getMenuItem(productId);
+    /*const product = menuData.menu.find(
       (item) => item.id === parseInt(productId)
-    );
+    ); */
 
     if (!product || product.price !== parseFloat(price)) {
       return res.status(400).json({ error: "Invalid product or price" });
