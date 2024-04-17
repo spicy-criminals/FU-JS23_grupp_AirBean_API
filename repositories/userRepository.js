@@ -1,5 +1,5 @@
 // userRepository.js
-const db = require("../database.db"); //vet inte om jag "länkat" rätt här
+const db = require("../users.db"); //vet inte om jag "länkat" rätt här
 
 async function getUsers() {
   return await db.find({});

@@ -11,7 +11,7 @@ Summary:
 const Datastore = require("nedb-promise");
 
 const db = new Datastore({
-  filename: "./database.db",
+  filename: "./users.db",
   autoload: true,
 });
 
