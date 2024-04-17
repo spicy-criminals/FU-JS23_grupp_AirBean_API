@@ -10,11 +10,13 @@
 {"userId":"someUserId","productId":1,"price":39,"timestamp":{"$$date":1713338777176},"_id":"GiWc2QiEPjj5AhFm"}
 {"userId":"anderssvensson","productId":2,"price":49,"timestamp":{"$$date":1713345081356},"_id":"IQRtKNg7QDwvIVWh"}
 {"userId":"someUserId","productId":2,"price":49,"timestamp":{"$$date":1713338763034},"_id":"JszbpwO2QAYYM5w7"}
+{"userId":"frans abc","productId":1,"price":39,"orderDate":"2024-04-17 12:22","deliveryDate":"2024-04-17 14:22","_id":"KEaKXXrSNVgJMkDH"}
 {"userId":"someUserId","productId":2,"price":49,"timestamp":{"$$date":1713338640500},"_id":"KWFRcQaRJPDBOy0g"}
 {"userId":"daniel budai","productId":1,"price":39,"timestamp":{"$$date":1713347935515},"_id":"R14DOuGVfrivNbWN"}
 {"userId":"lukas svensson","productId":1,"price":39,"orderDate":{"$$date":1713348457400},"deliveryDate":{"$$date":1713355657400},"_id":"R5qOBsSZAbAZvxzO"}
 {"userId":"testIDjajajaj","productId":3,"price":49,"timestamp":{"$$date":1713343968780},"_id":"RF5uBIecbUWz8cn5"}
 {"userId":"daniel budai","productId":2,"price":49,"timestamp":{"$$date":1713347901761},"_id":"WITZTI5N2IQWpElE"}
+{"userId":"frans abc","productId":1,"price":39,"orderDate":"2024-04-17 12:22","deliveryDate":"2024-04-17 14:22","_id":"XGTka43cMKcCEXM4"}
 {"userId":"karlmarklund","productId":2,"price":49,"timestamp":{"$$date":1713347824639},"_id":"cF5HA69bwHX0euqS"}
 {"userId":"anderssvensson","productId":1,"price":39,"timestamp":{"$$date":1713345003281},"_id":"gfQ7WWipbJ7roULc"}
 {"userId":"someUserId","productId":2,"price":49,"timestamp":{"$$date":1713338606765},"_id":"iIzbdoqdkUrlYOdM"}
@@ -24,5 +26,3 @@
 {"userId":"lukas svensson","productId":1,"price":39,"orderDate":{"$$date":1713348457395},"deliveryDate":{"$$date":1713355657395},"_id":"rsKJpKLiM4y99v0K"}
 {"userId":"testID","productId":2,"price":49,"timestamp":{"$$date":1713343935454},"_id":"sLhhg6S5HgWGZY3T"}
 {"userId":"lars larsson","productId":1,"price":39,"orderDate":{"$$date":1713348814024},"deliveryDate":{"$$date":1713356014024},"_id":"zr2bEfgI5NArc4mK"}
-{"userId":"frans abc","productId":1,"price":39,"orderDate":"2024-04-17 12:22","deliveryDate":"2024-04-17 14:22","_id":"KEaKXXrSNVgJMkDH"}
-{"userId":"frans abc","productId":1,"price":39,"orderDate":"2024-04-17 12:22","deliveryDate":"2024-04-17 14:22","_id":"XGTka43cMKcCEXM4"}
