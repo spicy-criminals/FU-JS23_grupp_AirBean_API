@@ -1,4 +1,5 @@
 const { body, validationResult } = require("express-validator");
+const db = require("../database")
 
 // Create a reusable validator function
 const validateNewUser = () => [
@@ -18,7 +19,27 @@ const validate = (req, res, next) => {
   next();
 };
 
+// Checks that the user to be deleted is the same as the one logged in
+async function checkLogin(req, res, next) {
+  const username = req.params.username;
+  const userId = req.user.userId;
+  const targetedUser = await db.findOne({ username: username });
+  if (!targetedUser) {
+    res.status(404).send({ error: "User not found" });
+    return;
+  }
+  console.log(userId, targetedUser.userId)
+  if (userId != targetedUser.userId) {
+    res
+      .status(403)
+      .send({ error: "You cannot delete somebody else's account" });
+    return;
+  }
+  next()
+}
+
 module.exports = {
   validateNewUser,
   validate,
+  checkLogin,
 };
