@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { createUser } = require("../controllers/UserController");
 const { validateNewUser, validate } = require("../validators/userValidators");
+const { authenticate, authenticateAlt } = require("../middlewares/auth");
 
 ///////// REQUESTS //////////
 
@@ -71,7 +72,7 @@ router.get("/user/:username", async (req, res) => {
 });
 
 // Delete a specific user
-router.delete("/user/:username", authenticate, async (req, res) => {
+router.delete("/user/:username", authenticateAlt, async (req, res) => {
 
   const username = req.params.username;
 
@@ -101,26 +102,4 @@ router.delete("/user/:username", authenticate, async (req, res) => {
   }
 });
 
-////////// AUTH ///////////
-
-// Token authentication middleware
-function authenticate(req, res, next) {
-  const authorization = req.headers["authorization"];
-  const token = authorization && authorization.split(" ")[1];
-
-  if (!token) {
-    res.status(401).send("No valid token provided");
-    return;
-  }
-  jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
-    if (error) {
-      res.status(403).send({ error: "Invalid token" });
-      return;
-    }
-    req.user = user;
-    console.log(req.user)
-    next();
-  });
-};
-
-module.exports = { router, authenticate };
+module.exports = { router };
