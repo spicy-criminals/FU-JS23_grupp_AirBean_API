@@ -11,5 +11,3 @@ function getMenuItem(productId) {
 }
 
 module.exports = { getMenu, getMenuItem };
-
-//ett item åt gången

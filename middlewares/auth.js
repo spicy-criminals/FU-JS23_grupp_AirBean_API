@@ -1,17 +1,10 @@
 const jwt = require("jsonwebtoken");
 
-// Takes { "authorization: <token>" } in header
 const authenticate = (req, res, next) => {
   const token = req.header("Authorization");
   if (!token) return res.status(401).send("Access Denied: No Token Provided!");
-
-  if (!token) {
-    res.status(401).send("No valid token provided");
-    return;
-  }
 };
 
-// Takes { "authorization": Bearer <token> } in header
 const authenticateAlt = (req, res, next) => {
   const authorization = req.headers["authorization"];
   const token = authorization && authorization.split(" ")[1];
