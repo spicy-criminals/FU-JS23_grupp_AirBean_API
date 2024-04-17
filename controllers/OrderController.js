@@ -43,6 +43,7 @@ async function createOrder(req, res) {
 
       // Include the orderDate when creating the order in the repository
       await createOrderInRepo(userUuid, productId, price, orderDate); // Replace userId with userUuid
+      return res.status(200).send("Order succesful");
     }
   } catch (error) {
     console.error(error);
