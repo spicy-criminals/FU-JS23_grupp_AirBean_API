@@ -8,14 +8,27 @@
   </head>
   <body>
     <h1>Welcome to the Airbean API</h1>
-    <h2>for all registered users, go go: <a href="/users">/users</a></h2>
-    <h2>to sign up, go to: <a href="/users/signup">/users/signup</a></h2>
-    <h2>to log in, go to: <a href="/users/login">/users/login</a></h2>
+    <h2>list of products: <a href="/menu">/menu</a></h2>
+    <h2>specific product: <a href="/menu/1">/menu/:itemId</a></h2>
+    <h2>all registered users: <a href="/users">/users</a></h2>
     <h2>
-      for a specific user, go to:
-      <a href="/users/user/:username">/users/user/:username</a>
+      specific user:
+      <a href="/users/user/max friberg">/users/user/:username</a>
     </h2>
-    <h2>for list of products, go to: <a href="/menu">/menu</a></h2>
-    <h2>for order summary, go to: <a href="/order">/order</a></h2>
+    <h2>sign up: <a href="/users/signup">/users/signup</a></h2>
+    <h2>log in: <a href="/users/login">/users/login</a></h2>
+
+    <h2>place an order: <a href="/order">/order</a></h2>
+    <h2>
+      specific users order history:
+      <a href="order/f8d909e5-4508-4dfe-a72c-9d2d0be1c194/history"
+        >/order/:userId/history</a
+      >
+    </h2>
+
+    <h3>
+      spicy criminals
+      <span>daniel budai, anna thunberg, rolf sparv, marcus widen</span>
+    </h3>
   </body>
 </html>

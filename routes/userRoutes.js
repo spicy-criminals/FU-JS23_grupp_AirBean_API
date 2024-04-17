@@ -16,14 +16,18 @@ router.get("/", async (req, res) => {
   }
 });
 
+// sign up
+
 router.get("/signup", (req, res) => {
   res.send({ message: "Make a post-request to sign up! :)" });
 });
 
 router.post("/signup", validateNewUser(), validate, createUser);
 
+// log in
+
 router.get("/login", (req, res) => {
-  res.send({ message: "Make a post-request to login up! :)" });
+  res.send({ message: "Make a post-request to log in! :)" });
 });
 
 router.post("/login", async (req, res) => {
@@ -49,6 +53,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// view specific user
+
 router.get("/user/:username", async (req, res) => {
   const username = req.params.username;
 
@@ -63,6 +69,8 @@ router.get("/user/:username", async (req, res) => {
     res.status(500).send({ error: "Server error" });
   }
 });
+
+// delete specific user
 
 router.delete("/user/:username", authenticateAlt, async (req, res) => {
   const username = req.params.username;

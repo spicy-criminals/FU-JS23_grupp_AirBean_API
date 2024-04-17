@@ -17,3 +17,22 @@ h2 {
   font-weight: 400;
   margin-bottom: 10px;
 }
+
+h3 {
+  font-weight: 400;
+  margin-top: 50px;
+}
+
+span {
+  font-style: italic;
+  font-size: 1rem;
+}
+
+a {
+  color: blue;
+}
+
+a:hover {
+  color: rgb(159, 159, 255);
+  font-style: italic;
+}
