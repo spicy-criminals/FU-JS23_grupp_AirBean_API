@@ -92,8 +92,8 @@ async function login(req, res) {
 
 async function getAllUsers(req, res) {
   try {
-    const users = getUsers();
-    res.send(users);
+    const users = await getUsers();
+    res.json(users);
   } catch (error) {
     res.status(404).send({ error: "Could not find any users :(" });
   }
