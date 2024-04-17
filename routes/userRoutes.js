@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../database");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { createUser, deleteUser, getUser, login, getAllUsers } = require("../controllers/UserController");
+const { createUser, deleteUserMiddleware, getUser, login, getAllUsers } = require("../controllers/UserController");
 const { validateNewUser, validate, checkLogin } = require("../validators/userValidators");
 const { authenticate, authenticateAlt } = require("../middlewares/auth");
 
@@ -24,6 +24,6 @@ router.post("/login", login);
 
 router.get("/user/:username", getUser);
 
-router.delete("/user/:username", authenticateAlt, checkLogin, deleteUser);
+router.delete("/user/:username", authenticateAlt, checkLogin, deleteUserMiddleware);
 
 module.exports = { router };
