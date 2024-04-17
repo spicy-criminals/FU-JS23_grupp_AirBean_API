@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { createOrder } = require("../controllers/OrderController");
-const { validateOrder } = require("../validators/orderValidators");
 
 // GET request: Retrieve data
 router.get("/", (req, res) => {
