@@ -68,5 +68,37 @@ async function getOrderHistory(req, res) {
   }
 }
 
+
+
+
+// Controller function to create a new order
+async function createOrder(req, res) {
+  try {
+    // Validate request body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { userId, productId, price } = req.body;
+
+    // Check if the product exists
+    const product = await getMenuItem(productId);
+    if (!product || product.price !== parseFloat(price)) {
+      return res.status(400).json({ error: "Invalid product or price" });
+    }
+
+    // Create the order
+    await createOrderInRepo(userId, productId, price);
+
+    res.status(201).json({ message: "Order placed successfully" });
+  } catch (error) {
+    console.error("Error creating order:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+
+
 // Export functions for use in other modules
 module.exports = { createOrder, getOngoingOrders, getOrderHistory };

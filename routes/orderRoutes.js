@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const { createOrder } = require("../controllers/OrderController");
+const { validateOrder } = require("../validators/orderValidators");
 
 // GET request: Retrieve data
 router.get("/", (req, res) => {
@@ -20,5 +22,21 @@ router.put("/", (req, res) => {
 router.delete("/", (req, res) => {
   res.send({ message: "Data deleted" });
 });
+
+
+
+
+
+
+
+// POST request to create a new order
+router.post("/", validateOrder, createOrder);
+
+
+
+
+
+
+
 
 module.exports = router;
