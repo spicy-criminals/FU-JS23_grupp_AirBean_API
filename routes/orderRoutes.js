@@ -28,9 +28,10 @@ router.delete("/", (req, res) => {
 
 
 
-
+/* 
 // POST request to create a new order
 router.post("/", validateOrder, createOrder);
+*/
 
 
 

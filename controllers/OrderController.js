@@ -70,7 +70,7 @@ async function getOrderHistory(req, res) {
 
 
 
-
+/*
 // Controller function to create a new order
 async function createOrder(req, res) {
   try {
@@ -97,7 +97,7 @@ async function createOrder(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
-
+*/
 
 
 // Export functions for use in other modules
