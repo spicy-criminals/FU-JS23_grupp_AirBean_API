@@ -103,3 +103,4 @@ router.delete("/user/:username", authenticateAlt, async (req, res) => {
 });
 
 module.exports = { router };
+
