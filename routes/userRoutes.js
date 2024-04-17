@@ -7,9 +7,7 @@ const { createUser, deleteUser, getUser, login, getAllUsers } = require("../cont
 const { validateNewUser, validate, checkLogin } = require("../validators/userValidators");
 const { authenticate, authenticateAlt } = require("../middlewares/auth");
 
-///////// REQUESTS //////////
 
-///// GET USERS /////
 router.get("/", getAllUsers);
 
 router.get("/signup", (req, res) => {
@@ -24,10 +22,8 @@ router.get("/login", (req, res) => {
 
 router.post("/login", login);
 
-// get a specific user
 router.get("/user/:username", getUser);
 
-// Delete a specific user
 router.delete("/user/:username", authenticateAlt, checkLogin, deleteUser);
 
 module.exports = { router };

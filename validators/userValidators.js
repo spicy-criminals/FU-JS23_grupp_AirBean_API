@@ -17,7 +17,6 @@ const validate = (req, res, next) => {
   next();
 };
 
-// Checks that the user to be deleted is the same as the one logged in
 async function checkLogin(req, res, next) {
   const username = req.params.username;
   const userId = req.user.userId;

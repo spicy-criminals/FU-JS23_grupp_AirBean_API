@@ -9,7 +9,6 @@ async function createUser(req, res) {
 
   try {
     const userId = uuidv4();
-    // lösenordet krypteras innan det sparas. hashas med bcrypts hash-funktion 10 gånger.
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newUser = {
@@ -48,7 +47,6 @@ async function deleteUser(req, res) {
 }
 
 async function getUser(req, res) {
-  // const userId = req.params.userId;
   const username = req.params.username;
 
   try {
