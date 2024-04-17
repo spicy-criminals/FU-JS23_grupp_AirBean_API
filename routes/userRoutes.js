@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { createUser } = require("../controllers/UserController");
 const { validateNewUser, validate } = require("../validators/userValidators");
-const authenticate = require("../middlewares/auth");
+
 
 ///////// REQUESTS //////////
 
@@ -72,7 +72,12 @@ router.get("/user/:username", async (req, res) => {
 });
 
 // Delete a specific user
+
 router.delete("/user/:username", authenticate, async (req, res) => {
+
+router.delete("/user/:username", authenticateAlt, async (req, res) => {
+
+
   const username = req.params.username;
 
   // uses the payload from the token to confirm that you're not trying delete somebody else's account
