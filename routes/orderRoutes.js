@@ -1,23 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../database");
-const jwt = require("jsonwebtoken");
+const { createOrder } = require("../controllers/OrderController"); // Import the createOrder function
 
-// cart routes
-router.get("/cart", (req, res) => {
-  res.send({ message: "Make a post request with " });
+//skapa en order
+router.post("/", createOrder);
+
+//se order history
+router.get("/", (req, res) => {
+  res.send({ message: "Here is your data" });
 });
 
-router.post("/cart", (req, res) => {
-  res.send({ message: "Data created" });
+// PUT request: Update existing data
+router.put("/", (req, res) => {
+  res.send({ message: "Data updated" });
 });
 
-router.delete("/cart", (req, res) => {
+// DELETE request: Delete existing data
+router.delete("/", (req, res) => {
   res.send({ message: "Data deleted" });
 });
-
-// summary routes
-
-// history routes
 
 module.exports = router;

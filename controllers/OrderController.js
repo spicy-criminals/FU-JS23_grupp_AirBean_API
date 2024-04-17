@@ -1,10 +1,12 @@
 const { validationResult } = require("express-validator");
 const { getMenuItem } = require("../repositories/menuRepository");
+const { findMenuItem } = require("../controllers/MenuController");
 const {
   createOrder: createOrderInRepo,
   getOngoingOrders: getOngoingOrdersInRepo,
   getOrderHistory: getOrderHistoryInRepo,
 } = require("../repositories/orderRepository");
+const { format } = require("date-fns");
 
 // Function to create a new order
 async function createOrder(req, res) {
@@ -15,19 +17,33 @@ async function createOrder(req, res) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { userId, productId, price } = req.body;
+    const orders = req.body;
 
-    const product = getMenuItem(productId);
+    for (let order of orders) {
+      const { userId, productId, price } = order;
 
-    if (!product || product.price !== parseFloat(price)) {
-      return res.status(400).json({ error: "Invalid product or price" });
+      // Get the current date and time and format it
+      const orderDate = format(new Date(), "yyyy-MM-dd HH:mm");
+
+      console.log(
+        `userId: ${userId}, productId: ${productId}, price: ${price}, orderDate: ${orderDate}`
+      ); // Log the values
+
+      const product = findMenuItem(productId);
+
+      console.log("Found product:", product); // Log the found product
+
+      if (!product || product.price !== parseFloat(price)) {
+        return res.status(400).json({ error: "Invalid product or price" });
+      }
+
+      // Include the orderDate when creating the order in the repository
+      await createOrderInRepo(userId, productId, price, orderDate);
     }
-
-    await createOrderInRepo(userId, productId, price);
 
     res.status(201).json({ message: "Order placed successfully" });
   } catch (error) {
-    console.error("Error creating order:", error);
+    console.error("Error creating order:", error); // Log the error
     res.status(500).json({ error: "Internal server error" });
   }
 }

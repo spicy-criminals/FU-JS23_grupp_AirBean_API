@@ -32,6 +32,7 @@ app.use(errorHandler);
 
 // Constants
 const PORT = process.env.PORT || 8000;
+process.env.JWT_SECRET = "The man in black fled across the desert, and the gunslinger followed"
 
 // Root route
 app.get("/", (req, res) => {
