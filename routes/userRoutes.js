@@ -73,7 +73,6 @@ router.get("/user/:username", async (req, res) => {
 
 // Delete a specific user
 router.delete("/user/:username", authenticateAlt, async (req, res) => {
-
   const username = req.params.username;
 
   // uses the payload from the token to confirm that you're not trying delete somebody else's account
@@ -81,13 +80,14 @@ router.delete("/user/:username", authenticateAlt, async (req, res) => {
   const targetedUser = await db.findOne({ username: username });
   if (!targetedUser) {
     res.status(404).send({ error: "User not found" });
-    return
+    return;
   }
   if (userId != targetedUser.userId) {
-    res.status(403).send({ error: "You cannot delete somebody else's account" });
-    return
+    res
+      .status(403)
+      .send({ error: "You cannot delete somebody else's account" });
+    return;
   }
-  
 
   try {
     const result = await db.remove({ username: username }, {});
