@@ -24,4 +24,9 @@ async function getMenuItem(req, res) {
   }
 }
 
-module.exports = { getMenu, getMenuItem };
+function findMenuItem(itemId) {
+  const item = menuData.menu.find((item) => item.id === Number(itemId));
+  return item;
+}
+
+module.exports = { getMenu, getMenuItem, findMenuItem };

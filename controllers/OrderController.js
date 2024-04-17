@@ -1,5 +1,7 @@
 const { validationResult } = require("express-validator");
 const { getMenuItem } = require("../repositories/menuRepository");
+const { findMenuItem } = require("../controllers/MenuController");
+
 const {
   createOrder: createOrderInRepo,
   getOngoingOrders: getOngoingOrdersInRepo,
@@ -17,7 +19,11 @@ async function createOrder(req, res) {
 
     const { userId, productId, price } = req.body;
 
-    const product = getMenuItem(productId);
+    console.log(`userId: ${userId}, productId: ${productId}, price: ${price}`); // Log the values
+
+    const product = findMenuItem(productId);
+
+    console.log("Found product:", product); // Log the found product
 
     if (!product || product.price !== parseFloat(price)) {
       return res.status(400).json({ error: "Invalid product or price" });
@@ -27,7 +33,7 @@ async function createOrder(req, res) {
 
     res.status(201).json({ message: "Order placed successfully" });
   } catch (error) {
-    console.error("Error creating order:", error);
+    console.error("Error creating order:", error); // Log the error
     res.status(500).json({ error: "Internal server error" });
   }
 }
