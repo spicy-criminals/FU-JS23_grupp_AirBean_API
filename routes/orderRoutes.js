@@ -1,24 +1,23 @@
 const express = require("express");
 const router = express.Router();
+const db = require("../database");
+const jwt = require("jsonwebtoken");
 
-// GET request: Retrieve data
-router.get("/", (req, res) => {
-  res.send({ message: "Here is your data" });
+// cart routes
+router.get("/cart", (req, res) => {
+  res.send({ message: "Make a post request with " });
 });
 
-// POST request: Create new data
-router.post("/", (req, res) => {
+router.post("/cart", (req, res) => {
   res.send({ message: "Data created" });
 });
 
-// PUT request: Update existing data
-router.put("/", (req, res) => {
-  res.send({ message: "Data updated" });
-});
-
-// DELETE request: Delete existing data
-router.delete("/", (req, res) => {
+router.delete("/cart", (req, res) => {
   res.send({ message: "Data deleted" });
 });
+
+// summary routes
+
+// history routes
 
 module.exports = router;
