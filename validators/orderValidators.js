@@ -1,7 +1,6 @@
 const { body } = require("express-validator");
 const menuData = require("../menu.json");
 
-// Create a reusable validator function
 const validateOrder = (menuData) => [
   body("userId").isUUID().withMessage("Ogiltigt användar-ID-format"),
 

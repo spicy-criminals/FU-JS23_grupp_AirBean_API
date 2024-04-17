@@ -7,9 +7,6 @@ const { createUser } = require("../controllers/UserController");
 const { validateNewUser, validate } = require("../validators/userValidators");
 const { authenticate, authenticateAlt } = require("../middlewares/auth");
 
-///////// REQUESTS //////////
-
-///// GET USERS /////
 router.get("/", async (req, res) => {
   try {
     const users = await db.find({});
@@ -19,13 +16,11 @@ router.get("/", async (req, res) => {
   }
 });
 
-////// SIGN UP ///////
 router.get("/signup", (req, res) => {
   res.send({ message: "Make a post-request to sign up! :)" });
 });
-router.post("/signup", validateNewUser(), validate, createUser);
 
-///////// LOGIN ////////
+router.post("/signup", validateNewUser(), validate, createUser);
 
 router.get("/login", (req, res) => {
   res.send({ message: "Make a post-request to login up! :)" });
@@ -54,9 +49,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// get a specific user
 router.get("/user/:username", async (req, res) => {
-  // const userId = req.params.userId;
   const username = req.params.username;
 
   try {
@@ -71,11 +64,8 @@ router.get("/user/:username", async (req, res) => {
   }
 });
 
-// Delete a specific user
 router.delete("/user/:username", authenticateAlt, async (req, res) => {
   const username = req.params.username;
-
-  // uses the payload from the token to confirm that you're not trying delete somebody else's account
   const userId = req.user.userId;
   const targetedUser = await db.findOne({ username: username });
   if (!targetedUser) {
@@ -103,4 +93,3 @@ router.delete("/user/:username", authenticateAlt, async (req, res) => {
 });
 
 module.exports = { router };
-
