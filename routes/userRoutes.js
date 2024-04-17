@@ -41,7 +41,7 @@ router.post("/login", async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ userID: user.userID }, JWT_SECRET, {
+    const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, {
       expiresIn: "30m",
     });
 
@@ -71,9 +71,22 @@ router.get("/user/:username", async (req, res) => {
 });
 
 // Delete a specific user
-router.delete("/user/:username", async (req, res) => {
-  // const userId = req.params.userId;
+router.delete("/user/:username", authenticate, async (req, res) => {
+
   const username = req.params.username;
+
+  // uses the payload from the token to confirm that you're not trying delete somebody else's account
+  const userId = req.user.userId;
+  const targetedUser = await db.findOne({ username: username });
+  if (!targetedUser) {
+    res.status(404).send({ error: "User not found" });
+    return
+  }
+  if (userId != targetedUser.userId) {
+    res.status(403).send({ error: "You cannot delete somebody else's account" });
+    return
+  }
+  
 
   try {
     const result = await db.remove({ username: username }, {});
@@ -91,7 +104,7 @@ router.delete("/user/:username", async (req, res) => {
 ////////// AUTH ///////////
 
 // Token authentication middleware
-const authenticate = (req, res, next) => {
+function authenticate(req, res, next) {
   const authorization = req.headers["authorization"];
   const token = authorization && authorization.split(" ")[1];
 
@@ -99,13 +112,13 @@ const authenticate = (req, res, next) => {
     res.status(401).send("No valid token provided");
     return;
   }
-
-  jwt.verify(token, JWT_SECRET, (error, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
     if (error) {
       res.status(403).send({ error: "Invalid token" });
       return;
     }
     req.user = user;
+    console.log(req.user)
     next();
   });
 };
