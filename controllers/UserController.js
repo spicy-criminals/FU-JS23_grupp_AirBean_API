@@ -2,12 +2,12 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const db = require("../database.js");
+const userId = uuidv4();
 
 async function createUser(req, res) {
   const { username, password } = req.body;
 
   // genererar ett unikt ID för den nya användaren med UUID
-  const userId = uuidv4();
 
   try {
     // lösenordet krypteras innan det sparas. hashas med bcrypts hash-funktion 10 gånger.

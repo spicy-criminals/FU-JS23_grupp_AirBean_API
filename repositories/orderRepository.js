@@ -20,7 +20,7 @@ const db = new Datastore({
 });
 const { isBefore, add, format } = require("date-fns");
 
-function createOrder(userId, productId, price) {
+function createOrder(userUuid, productId, price) {
   return new Promise((resolve, reject) => {
     const orderDate = format(new Date(), "yyyy-MM-dd HH:mm");
     const deliveryDate = format(
@@ -29,7 +29,7 @@ function createOrder(userId, productId, price) {
     );
 
     db.insert(
-      { userId, productId, price, orderDate, deliveryDate },
+      { userUuid, productId, price, orderDate, deliveryDate },
       (err, newDoc) => {
         if (err) reject(err);
         else resolve(newDoc);
@@ -57,9 +57,9 @@ function getOngoingOrders(currentTime) {
   });
 }
 
-function getOrderHistory(userId) {
+function getOrderHistory(userUuid) {
   return new Promise((resolve, reject) => {
-    db.find({ userId }, (err, docs) => {
+    db.find({ userUuid }, (err, docs) => {
       if (err) reject(err);
       else resolve(docs);
     });

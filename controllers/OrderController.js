@@ -19,14 +19,18 @@ async function createOrder(req, res) {
 
     const orders = req.body;
 
+    if (!Array.isArray(orders)) {
+      return res.status(400).json({ error: "Invalid order data" });
+    }
+
     for (let order of orders) {
-      const { userId, productId, price } = order;
+      const { userUuid, productId, price } = order; // Replace userId with userUuid
 
       // Get the current date and time and format it
       const orderDate = format(new Date(), "yyyy-MM-dd HH:mm");
 
       console.log(
-        `userId: ${userId}, productId: ${productId}, price: ${price}, orderDate: ${orderDate}`
+        `userUuid: ${userUuid}, productId: ${productId}, price: ${price}, orderDate: ${orderDate}` // Replace userId with userUuid
       ); // Log the values
 
       const product = findMenuItem(productId);
@@ -38,13 +42,13 @@ async function createOrder(req, res) {
       }
 
       // Include the orderDate when creating the order in the repository
-      await createOrderInRepo(userId, productId, price, orderDate);
+      await createOrderInRepo(userUuid, productId, price, orderDate); // Replace userId with userUuid
     }
-
-    res.status(201).json({ message: "Order placed successfully" });
   } catch (error) {
-    console.error("Error creating order:", error); // Log the error
-    res.status(500).json({ error: "Internal server error" });
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating the order" });
   }
 }
 

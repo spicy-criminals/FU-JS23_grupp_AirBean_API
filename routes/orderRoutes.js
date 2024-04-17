@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { createOrder } = require("../controllers/OrderController"); // Import the createOrder function
-
+const {
+  createOrder,
+  getOrderHistory,
+} = require("../controllers/OrderController");
 //skapa en order
 router.post("/", createOrder);
 
 //se order history
-router.get("/", (req, res) => {
-  res.send({ message: "Here is your data" });
-});
+router.get("/:userId/history", getOrderHistory);
 
 // PUT request: Update existing data
 router.put("/", (req, res) => {
