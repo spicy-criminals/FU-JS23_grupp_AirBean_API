@@ -8,7 +8,8 @@ const {
   getUserById,
   updateUser,
   deleteUser,
-  getUserByUsername } = require("../repositories/userRepository")
+  getUserByUsername,
+} = require("../repositories/userRepository");
 
 async function createUser(req, res) {
   const { username, password } = req.body;
@@ -71,7 +72,7 @@ async function login(req, res) {
   try {
     const { username, password } = req.body;
 
-    const user = getUserByUsername(username);
+    const user = await getUserByUsername(username);
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
       res.status(401).send("Incorrect username or password");
