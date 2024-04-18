@@ -3,6 +3,7 @@ const { getMenuItem } = require("../repositories/menuRepository");
 const { findMenuItem } = require("../controllers/MenuController");
 const {
   createOrder: createOrderInRepo,
+  removeProduct: removeProductInRepo,
   getOngoingOrders: getOngoingOrdersInRepo,
   getOrderHistory: getOrderHistoryInRepo,
 } = require("../repositories/orderRepository");
@@ -48,6 +49,22 @@ async function createOrder(req, res) {
   }
 }
 
+async function deleteProduct(req, res) {
+  const productId = req.params.productId;
+
+  try {
+    const numRemoved = await removeProductInRepo(productId);
+    if (numRemoved > 0) {
+      res.json({ message: "Product removed successfully!" });
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
+  } catch (error) {
+    console.error("Error removing product:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 async function getOngoingOrders(req, res) {
   try {
     const currentTime = new Date();
@@ -70,4 +87,9 @@ async function getOrderHistory(req, res) {
   }
 }
 
-module.exports = { createOrder, getOngoingOrders, getOrderHistory };
+module.exports = {
+  createOrder,
+  deleteProduct,
+  getOngoingOrders,
+  getOrderHistory,
+};

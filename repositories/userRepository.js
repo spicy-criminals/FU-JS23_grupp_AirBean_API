@@ -1,4 +1,4 @@
-const db = require("../users.db");
+const db = require("../database");
 
 async function getUsers() {
   return await db.find({});

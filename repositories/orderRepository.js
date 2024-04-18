@@ -23,6 +23,15 @@ function createOrder(userUuid, productId, price) {
   });
 }
 
+function removeProduct(productId) {
+  return new Promise((resolve, reject) => {
+    db.remove({ _id: productId }, { multi: true }, (err, numRemoved) => {
+      if (err) reject(err);
+      else resolve(numRemoved);
+    });
+  });
+}
+
 function getOngoingOrders(currentTime) {
   return new Promise((resolve, reject) => {
     db.find({}, (err, docs) => {
@@ -51,4 +60,9 @@ function getOrderHistory(userUuid) {
   });
 }
 
-module.exports = { createOrder, getOngoingOrders, getOrderHistory };
+module.exports = {
+  createOrder,
+  removeProduct,
+  getOngoingOrders,
+  getOrderHistory,
+};
